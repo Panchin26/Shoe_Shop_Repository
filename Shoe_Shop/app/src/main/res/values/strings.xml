@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Shoe Shop</string>
     <string name="welc">Wellcome</string>
     <string name="start">Let’s Start Journey </string>
     <string name="collect">Smart, Gorgeous &amp; Fashionable Collection Explor Now</string>
