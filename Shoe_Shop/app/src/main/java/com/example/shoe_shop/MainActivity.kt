@@ -12,14 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.shoe_shop.ui.screens.RegisterAccountScreen
-import com.example.shoe_shop.ui.theme.Shoe_ShopTheme
+import com.example.shoe_shop.ui.theme.ShoeShopTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Shoe_ShopTheme() {
+            ShoeShopTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     RegisterAccountScreen()
                 }
