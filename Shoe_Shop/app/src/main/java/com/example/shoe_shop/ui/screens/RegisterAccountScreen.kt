@@ -1,5 +1,6 @@
 package com.example.shoe_shop.ui.screens
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -21,32 +23,104 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.core.content.edit
+import com.example.shoe_shop.data.model.SignUpRequest
 import com.example.shoe_shop.R
+import com.example.shoe_shop.ui.components.AlertDialogWithTwoButtons
 import com.example.shoe_shop.ui.components.BackButton
 import com.example.shoe_shop.ui.components.DisableButton
-import com.example.shoe_shop.ui.theme.ShoeShopTheme
+import com.example.shoe_shop.ui.theme.AppTypography
+import com.example.shoe_shop.ui.viewmodel.SignUpState
+import com.example.shoe_shop.ui.viewmodel.SignUpViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterAccountScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {},
-    onLoginClick: () -> Unit = {}
+    onSignInClick: () -> Unit,
+    onSignUpClick: () -> Unit,
+    viewModel: SignUpViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var isChecked by remember { mutableStateOf(false) }
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    var pendingSignUpRequest by remember { mutableStateOf<SignUpRequest?>(null) }
 
-    val isFormValid = name.isNotBlank() &&
-            email.isNotBlank() &&
-            password.isNotBlank() &&
-            isChecked
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val signUpState by viewModel.signUpState.collectAsStateWithLifecycle()
 
-    // Используем цвета из темы вместо хардкода
+    // Получаем SharedPreferences как в вашем коде
+    val sharedPreferences = remember {
+        context.getSharedPreferences("shoe_shop_prefs", Context.MODE_PRIVATE)
+    }
+
+    // Обработка состояний регистрации
+    LaunchedEffect(signUpState) {
+        when (signUpState) {
+            is SignUpState.Success -> {
+                // Сохраняем данные при успешной регистрации
+                saveUserDataToPreferences(sharedPreferences, name, email)
+                onSignUpClick()
+                viewModel.resetState()
+            }
+            is SignUpState.Error -> {
+                val error = (signUpState as SignUpState.Error)
+                errorMessage = error.message
+
+                // Показываем диалог только для определенных ошибок
+                val showDialog = when {
+                    error.message.contains("Too many requests", ignoreCase = true) -> true
+                    error.message.contains("rate limit", ignoreCase = true) -> true
+                    error.message.contains("network", ignoreCase = true) -> true
+                    error.message.contains("invalid", ignoreCase = true) -> true
+                    else -> true
+                }
+
+                if (showDialog) {
+                    showErrorDialog = true
+                } else {
+                    // Для других ошибок можно показать Snackbar или Toast
+                    // например, для ошибок валидации
+                }
+                viewModel.resetState()
+            }
+            else -> {}
+        }
+    }
+
+    // Диалог для ошибок
+    AlertDialogWithTwoButtons(
+        showDialog = showErrorDialog,
+        onDismissRequest = {
+            showErrorDialog = false
+            errorMessage = ""
+        },
+        onConfirm = {
+            // При нажатии Отмена - просто закрываем диалог
+            showErrorDialog = false
+            errorMessage = ""
+            pendingSignUpRequest = null
+        },
+        onCancel = {
+            // При нажатии Отмена - просто закрываем диалог
+            showErrorDialog = false
+            errorMessage = ""
+            pendingSignUpRequest = null
+        },
+        title = stringResource(R.string.details),
+        message = errorMessage,
+        cancelButtonText = stringResource(R.string.cancel),
+    )
+
+    // Используем цвета из темы
     val hintColor = MaterialTheme.colorScheme.onSurfaceVariant
     val borderColor = MaterialTheme.colorScheme.outline
     val checkboxBorderColor = MaterialTheme.colorScheme.outlineVariant
@@ -54,7 +128,7 @@ fun RegisterAccountScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 23.dp)
+            .padding(23.dp)
             .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
     ) {
@@ -67,25 +141,24 @@ fun RegisterAccountScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(id = R.string.registr),
-                style = MaterialTheme.typography.headlineMedium, // Используем тему
+                text = stringResource(id = R.string.register),
+                style = AppTypography.headingRegular32,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
             Text(
                 text = stringResource(id = R.string.details),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = AppTypography.subtitleRegular16,
+                color = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.padding(bottom = 40.dp)
             )
         }
 
         // Поле "Имя"
         Text(
-            text = stringResource(id = R.string.yname),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
+            text = stringResource(id = R.string.name),
+            style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -96,7 +169,7 @@ fun RegisterAccountScreen(
             placeholder = {
                 Text(
                     "xxxxxxxx",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTypography.bodyRegular14,
                     color = hintColor
                 )
             },
@@ -111,17 +184,18 @@ fun RegisterAccountScreen(
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
                 cursorColor = MaterialTheme.colorScheme.primary,
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedPlaceholderColor = hintColor,
+                unfocusedPlaceholderColor = hintColor
             ),
-            textStyle = MaterialTheme.typography.bodyMedium,
+            textStyle = AppTypography.bodyRegular16,
             singleLine = true
         )
 
         // Поле "Email"
         Text(
-            text = stringResource(id = R.string.eml),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
+            text = stringResource(id = R.string.email),
+            style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -132,7 +206,7 @@ fun RegisterAccountScreen(
             placeholder = {
                 Text(
                     "......@mail.com",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTypography.bodyRegular14,
                     color = hintColor
                 )
             },
@@ -148,17 +222,18 @@ fun RegisterAccountScreen(
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
                 cursorColor = MaterialTheme.colorScheme.primary,
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedPlaceholderColor = hintColor,
+                unfocusedPlaceholderColor = hintColor
             ),
-            textStyle = MaterialTheme.typography.bodyMedium,
+            textStyle = AppTypography.bodyRegular16,
             singleLine = true
         )
 
         // Поле "Пароль"
         Text(
-            text = stringResource(id = R.string.pwd),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Medium,
+            text = stringResource(id = R.string.pass),
+            style = AppTypography.bodyMedium16.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -169,7 +244,7 @@ fun RegisterAccountScreen(
             placeholder = {
                 Text(
                     "......",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTypography.bodyRegular14,
                     color = hintColor
                 )
             },
@@ -190,9 +265,11 @@ fun RegisterAccountScreen(
                 focusedLabelColor = MaterialTheme.colorScheme.primary,
                 cursorColor = MaterialTheme.colorScheme.primary,
                 focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                unfocusedTextColor = MaterialTheme.colorScheme.onSurface
+                unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                focusedPlaceholderColor = hintColor,
+                unfocusedPlaceholderColor = hintColor
             ),
-            textStyle = MaterialTheme.typography.bodyMedium,
+            textStyle = AppTypography.bodyRegular16,
             singleLine = true,
             trailingIcon = {
                 IconButton(
@@ -235,7 +312,6 @@ fun RegisterAccountScreen(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                // Фон чекбокса
                 Box(
                     modifier = Modifier
                         .size(24.dp)
@@ -250,7 +326,6 @@ fun RegisterAccountScreen(
                         )
                 )
 
-                // Галочка
                 if (isChecked) {
                     Icon(
                         painter = painterResource(id = R.drawable.policy_check),
@@ -264,23 +339,40 @@ fun RegisterAccountScreen(
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = stringResource(id = R.string.persdata),
-                style = MaterialTheme.typography.bodyMedium,
+                text = stringResource(id = R.string.agree),
+                style = AppTypography.bodyRegular14,
                 color = hintColor,
                 modifier = Modifier.weight(1f)
             )
         }
 
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Кнопка регистрации
         DisableButton(
-            text = stringResource(id = R.string.registr),
-            onClick = onRegisterClick,
-            enabled = isFormValid
+            text = stringResource(id = R.string.sign_up),
+            onClick = {
+                if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && isChecked) {
+                    val signUpRequest = SignUpRequest(email, password)
+                    pendingSignUpRequest = signUpRequest
+                    viewModel.signUp(signUpRequest)
+                } else {
+                    // Валидация полей
+                    errorMessage = when {
+                        name.isEmpty() -> "Please enter your name"
+                        email.isEmpty() -> "Please enter your email address"
+                        password.isEmpty() -> "Please enter your password"
+                        !isChecked -> "Please accept the terms and conditions"
+                        else -> "Please fill in all required fields"
+                    }
+                    showErrorDialog = true
+                }
+            },
+            enabled = name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && isChecked,
+            textStyle = AppTypography.bodyMedium16
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         // Ссылка на вход
         Row(
@@ -288,30 +380,29 @@ fun RegisterAccountScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             TextButton(
-                onClick = onLoginClick,
+                onClick = onSignInClick,
                 contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 Text(
                     buildAnnotatedString {
                         withStyle(
                             style = SpanStyle(
-                                color = hintColor,
-                                fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
-                                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontFamily = AppTypography.bodyRegular16.fontFamily,
+                                fontSize = AppTypography.bodyRegular16.fontSize
                             )
                         ) {
-                            append(stringResource(id = R.string.login))
+                            append(stringResource(id = R.string.have_acc))
                         }
                         append(" ")
                         withStyle(
                             style = SpanStyle(
-                                color = MaterialTheme.colorScheme.primary,
-                                fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
-                                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                fontWeight = FontWeight.Medium
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontFamily = AppTypography.bodyRegular16.fontFamily,
+                                fontSize = AppTypography.bodyRegular16.fontSize,
                             )
                         ) {
-                            append(stringResource(id = R.string.signin))
+                            append(stringResource(id = R.string.sign_in))
                         }
                     }
                 )
@@ -320,10 +411,13 @@ fun RegisterAccountScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun RegisterAccountScreenPreview() {
-    ShoeShopTheme {
-        RegisterAccountScreen()
+private fun saveUserDataToPreferences(
+    sharedPreferences: android.content.SharedPreferences,
+    name: String,
+    email: String
+) {
+    sharedPreferences.edit {
+        putString("user_name", name)
+        putString("user_email", email)
     }
 }
