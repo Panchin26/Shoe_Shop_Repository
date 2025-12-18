@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.Shoe_Shop" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Splash Screen Theme -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/accent</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/shoe_shop_icon</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.Shoe_Shop</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>

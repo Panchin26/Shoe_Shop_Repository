@@ -1,7 +1,7 @@
 package com.example.shoe_shop.data.navigation
 
-import com.example.shoe_shop.ui.screens.EmailVerificationScreen
-import com.example.shoe_shop.ui.screens.RecoveryVerificationScreen
+import EmailVerificationScreen
+import RecoveryVerificationScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +10,7 @@ import com.example.shoe_shop.ui.screens.ForgotPasswordScreen
 import com.example.shoe_shop.ui.screens.RegisterAccountScreen
 import com.example.shoe_shop.ui.screens.SignInScreen
 
+// В NavigationApp обновите маршруты
 @Composable
 fun NavigationApp(navController: NavHostController) {
     NavHost(

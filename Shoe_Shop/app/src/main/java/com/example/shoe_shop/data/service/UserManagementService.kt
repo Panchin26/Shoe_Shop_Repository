@@ -7,6 +7,7 @@ import com.example.shoe_shop.data.model.SignUpRequest
 import com.example.shoe_shop.data.model.SignUpResponse
 import com.example.shoe_shop.data.model.VerifyOtpRequest
 import com.example.shoe_shop.data.model.VerifyOtpResponse
+import com.example.shoe_shop.data.model.VerifyRecoveryResponse
 import com.example.shoe_shop.data.model.ChangePasswordRequest
 import com.example.shoe_shop.data.model.ChangePasswordResponse
 import com.example.shoe_shop.data.model.ForgotPasswordRequest
@@ -18,7 +19,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
-const val API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3bWNiZXZvZXpzd2dqeWV2eHhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU5NDgwODQsImV4cCI6MjA4MTUyNDA4NH0.h_bZx40ymD-DK2MpSki8P5HrSfgWVRhPezXaWCrKmHo"
+const val API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpeGlwdXh5b2ZwYWZudmJhcHJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU4NDM3OTMsImV4cCI6MjA4MTQxOTc5M30.-GHt_7WKFHWMzhN9MerHX7a3ZVW_IJDBIDmIxXW5gJ8"
 
 interface UserManagementService {
 
@@ -42,7 +43,8 @@ interface UserManagementService {
     )
     @POST("auth/v1/verify")
     suspend fun verifyOtp(@Body verifyOtpRequest: VerifyOtpRequest): Response<VerifyOtpResponse>
-
+    @POST("auth/verify-recovery-otp")
+    suspend fun verifyRecoveryOtp(@Body request: VerifyOtpRequest): Response<VerifyRecoveryResponse>
 
     @Headers(
         "apikey: $API_KEY",
