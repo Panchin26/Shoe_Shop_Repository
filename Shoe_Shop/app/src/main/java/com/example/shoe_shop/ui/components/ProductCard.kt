@@ -1,6 +1,7 @@
 // ui/components/ProductCard.kt
 package com.example.shoe_shop.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.shoe_shop.data.model.Product
@@ -37,36 +40,42 @@ fun ProductCard(
         )
     ) {
         Column {
-            // Верхняя часть с изображением и кнопкой избранного
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)
-                    .background(Color.White)
             ) {
-                // Кнопка избранного
+                if (product.imageResId != null) {
+                    Image(
+                        painter = painterResource(id = product.imageResId),
+                        contentDescription = product.name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Gray.copy(alpha = 0.3f))
+                    )
+                }
                 IconButton(
                     onClick = {
                         isFavorite = !isFavorite
                         onFavoriteClick()
-                    }
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
                 ) {
                     Icon(
                         imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Избранное",
-                        tint = if (isFavorite) Color.Red else Color.Gray
+                        tint = if (isFavorite) Color.Red else Color.Black
                     )
                 }
-                // Здесь будет изображение товара
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                        .background(Color.Gray.copy(alpha = 0.3f))
-                )
             }
 
-            // Нижняя часть с информацией о товаре
             Column(
                 modifier = Modifier
                     .padding(12.dp)
@@ -110,7 +119,8 @@ fun ProductCardPreview() {
             price = "P752.00",
             originalPrice = "P850.00",
             category = "BEST SELLER",
-            imageUrl = ""
+            imageUrl = "",
+            imageResId = null
         ),
         onProductClick = {},
         onFavoriteClick = {}
