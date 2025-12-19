@@ -1,4 +1,3 @@
-// SuccessAlertDialog.kt
 package com.example.shoe_shop.ui.components
 
 import androidx.compose.foundation.background
@@ -37,14 +36,14 @@ fun PasswordResetAlertDialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = true // Разрешаем закрытие при клике вне диалога
+            dismissOnClickOutside = true
         )
     ) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .clickable { // Добавляем обработку клика
+                .clickable {
                     onConfirm()
                 },
             shape = MaterialTheme.shapes.extraLarge
@@ -55,7 +54,7 @@ fun PasswordResetAlertDialog(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Иконка письма
+
                 Icon(
                     painter = painterResource(id = R.drawable.email),
                     contentDescription = "Email sent",
@@ -65,7 +64,6 @@ fun PasswordResetAlertDialog(
                     tint = MaterialTheme.colorScheme.primary
                 )
 
-                // Заголовок
                 Text(
                     text = stringResource(id = R.string.check_your_email),
                     style = AppTypography.headingSemiBold16,
@@ -74,7 +72,6 @@ fun PasswordResetAlertDialog(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Сообщение с email
                 Text(
                     text = buildAnnotatedString {
                         append(stringResource(id = R.string.recovery_code_sent))
@@ -85,7 +82,7 @@ fun PasswordResetAlertDialog(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         ) {
-                            append("") // Показываем email пользователя
+                            append("")
                         }
                     },
                     style = AppTypography.bodyRegular16,

@@ -1,4 +1,3 @@
-// UserManagementService.kt
 package com.example.myfirstproject.data.service
 
 import com.example.myfirstproject.data.model.SignInRequest
@@ -61,7 +60,7 @@ interface UserManagementService {
     )
     @PUT("auth/v1/user")
     suspend fun changePassword(
-        @Header("Authorization") token: String, // Bearer токен пользователя
+        @Header("Authorization") token: String,
         @Body changePasswordRequest: ChangePasswordRequest
     ): Response<ChangePasswordResponse>
 }

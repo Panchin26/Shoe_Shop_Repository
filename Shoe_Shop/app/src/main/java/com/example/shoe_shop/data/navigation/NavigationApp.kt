@@ -12,7 +12,6 @@ import com.example.shoe_shop.ui.screens.OnboardScreen
 import com.example.shoe_shop.ui.screens.RegisterAccountScreen
 import com.example.shoe_shop.ui.screens.SignInScreen
 
-// В NavigationApp обновите маршруты
 @Composable
 fun NavigationApp(navController: NavHostController) {
     NavHost(

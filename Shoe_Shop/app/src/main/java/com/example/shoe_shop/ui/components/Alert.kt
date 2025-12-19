@@ -1,4 +1,3 @@
-// ui/components/AlertDialogWithTwoButtons.kt
 package com.example.shoe_shop.ui.components
 
 import androidx.compose.foundation.layout.*
@@ -48,9 +47,6 @@ fun AlertDialogWithTwoButtons(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Иконка (опционально
-
-                    // Заголовок
                     Text(
                         text = title,
                         style = AppTypography.bodyMedium16,
@@ -58,8 +54,6 @@ fun AlertDialogWithTwoButtons(
                         modifier = Modifier.padding(bottom = 8.dp),
                         textAlign = TextAlign.Center
                     )
-
-                    // Сообщение
                     Text(
                         text = message,
                         style = AppTypography.bodyRegular14,
@@ -67,13 +61,10 @@ fun AlertDialogWithTwoButtons(
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
-
-                    // Кнопки в ряд
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        // Кнопка Отмена
                         OutlinedButton(
                             onClick = {
                                 onCancel()
@@ -92,8 +83,6 @@ fun AlertDialogWithTwoButtons(
                                 style = AppTypography.bodyMedium14
                             )
                         }
-
-                        // Кнопка OK
                         Button(
                             onClick = {
                                 onConfirm()

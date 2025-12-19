@@ -16,14 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.example.shoe_shop.R
 import com.example.shoe_shop.ui.theme.AppTypography
 
-// DisableButton.kt
 @Composable
 fun OnboardButtun(
     text: String,
     onClick: () -> Unit,
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = AppTypography.bodyRegular14 // Добавляем параметр стиля
+    textStyle: TextStyle = AppTypography.bodyRegular14
 ) {
     Button(
         onClick = onClick,
@@ -41,7 +40,7 @@ fun OnboardButtun(
     ) {
         Text(
             text = text,
-            style = textStyle // Используем переданный стиль
+            style = textStyle
         )
     }
 }

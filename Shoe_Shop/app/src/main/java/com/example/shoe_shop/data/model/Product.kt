@@ -6,6 +6,6 @@ data class Product(
     val price: String,
     val originalPrice: String,
     val category: String,
-    val imageUrl: String = "", // для URL из сети
-    val imageResId: Int? = null // для локальных ресурсов
+    val imageUrl: String = "",
+    val imageResId: Int? = null
 )

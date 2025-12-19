@@ -37,7 +37,7 @@ import com.example.shoe_shop.ui.viewmodel.SignInViewModel
 @Composable
 fun CreateNewPasswordScreen(
     modifier: Modifier = Modifier,
-    userToken: String? = null, // Добавьте параметр для токена
+    userToken: String? = null,
     onPasswordChanged: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
     onSignInClick: () -> Unit = {},
@@ -49,14 +49,11 @@ fun CreateNewPasswordScreen(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    // Состояние для отслеживания ошибок валидации
     var passwordError by remember { mutableStateOf<String?>(null) }
     var confirmPasswordError by remember { mutableStateOf<String?>(null) }
 
-    // Отслеживаем состояние смены пароля
     val changePasswordState by viewModel.changePasswordState.collectAsStateWithLifecycle()
 
-    // AlertDialog для отображения результатов
     var showSuccessDialog by remember { mutableStateOf(false) }
     var showErrorDialog by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -76,7 +73,6 @@ fun CreateNewPasswordScreen(
         }
     }
 
-    // Функция валидации пароля
     fun validatePasswords(): Boolean {
         var isValid = true
 

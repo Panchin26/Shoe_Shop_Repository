@@ -26,7 +26,7 @@ fun BackButton(
 ) {
     Box(
         modifier = modifier
-            .size(40.dp) // Размер кружочка
+            .size(40.dp)
             .clip(CircleShape)
             .background(backgroundColor)
             .clickable(onClick = onClick),
@@ -35,7 +35,7 @@ fun BackButton(
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.back),
             contentDescription = "Назад",
-            modifier = Modifier.size(24.dp) // Размер иконки
+            modifier = Modifier.size(24.dp)
         )
     }
 }
