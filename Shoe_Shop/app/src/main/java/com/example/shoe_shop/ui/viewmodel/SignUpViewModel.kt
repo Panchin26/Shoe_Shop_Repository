@@ -1,9 +1,7 @@
-package com.example.shoe_shop.ui.viewmodel
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoe_shop.data.model.SignUpRequest
+import com.example.myfirstproject.data.model.SignUpRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

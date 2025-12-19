@@ -1,4 +1,4 @@
-package com.example.shoe_shop.data.model
+package com.example.myfirstproject.data.model
 
 data class SignUpResponse(
     val id: String

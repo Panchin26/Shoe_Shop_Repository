@@ -102,7 +102,7 @@ fun SignInScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.hello),
+                text = stringResource(id = R.string.hello),
                 style = AppTypography.headingRegular32,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 8.dp)

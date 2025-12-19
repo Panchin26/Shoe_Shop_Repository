@@ -1,13 +1,13 @@
 // UserManagementService.kt
-package com.example.shoe_shop.data.service
+package com.example.myfirstproject.data.service
 
-import com.example.shoe_shop.data.model.SignInRequest
-import com.example.shoe_shop.data.model.SignInResponse
-import com.example.shoe_shop.data.model.SignUpRequest
-import com.example.shoe_shop.data.model.SignUpResponse
-import com.example.shoe_shop.data.model.VerifyOtpRequest
-import com.example.shoe_shop.data.model.VerifyOtpResponse
-import com.example.shoe_shop.data.model.VerifyRecoveryResponse
+import com.example.myfirstproject.data.model.SignInRequest
+import com.example.myfirstproject.data.model.SignInResponse
+import com.example.myfirstproject.data.model.SignUpRequest
+import com.example.myfirstproject.data.model.SignUpResponse
+import com.example.myfirstproject.data.model.VerifyOtpRequest
+import com.example.myfirstproject.data.model.VerifyOtpResponse
+import com.example.myfirstproject.data.model.VerifyRecoveryResponse
 import com.example.shoe_shop.data.model.ChangePasswordRequest
 import com.example.shoe_shop.data.model.ChangePasswordResponse
 import com.example.shoe_shop.data.model.ForgotPasswordRequest

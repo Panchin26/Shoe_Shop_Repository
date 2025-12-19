@@ -3,7 +3,7 @@ package com.example.shoe_shop.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoe_shop.data.model.SignInRequest
+import com.example.myfirstproject.data.model.SignInRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -103,7 +103,7 @@ class SignInViewModel : ViewModel() {
         Log.d("Auth", "Refresh token saved: ${token.take(10)}...")
     }
 
-    private fun saveUserData(user: com.example.shoe_shop.data.model.User) {
+    private fun saveUserData(user: com.example.myfirstproject.data.model.User) {
         // TODO: Сохранить данные пользователя
         Log.d("Auth", "User data saved: ${user.email}")
     }

@@ -97,7 +97,7 @@ fun ForgotPasswordScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.forgot_password),
+                    text = stringResource(id = R.string.forgot_password),
                     style = AppTypography.headingRegular32,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 8.dp)

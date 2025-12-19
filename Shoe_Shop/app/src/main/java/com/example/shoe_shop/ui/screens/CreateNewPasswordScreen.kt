@@ -165,7 +165,7 @@ fun CreateNewPasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.set_new_password),
+                text = stringResource(id = R.string.set_new_password),
                 style = AppTypography.headingRegular32,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.padding(bottom = 8.dp)

@@ -4,7 +4,7 @@ package com.example.shoe_shop.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoe_shop.data.model.*
+import com.example.myfirstproject.data.model.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,16 +14,24 @@ import com.example.shoe_shop.data.RetrofitInstance
 
 class EmailVerificationViewModel : ViewModel() {
 
+    // Общее состояние для обоих типов
     private val _verificationState = MutableStateFlow<VerificationState>(VerificationState.Idle)
     val verificationState: StateFlow<VerificationState> = _verificationState
 
+    // Отдельное состояние для recovery (если нужны разные данные)
     private val _recoveryState = MutableStateFlow<RecoveryState?>(null)
     val recoveryState: StateFlow<RecoveryState?> = _recoveryState
 
+    /**
+     * Верификация OTP для подтверждения email
+     */
     fun verifyEmailOtp(email: String, otpCode: String) {
         verifyOtpInternal(email, otpCode, OtpType.EMAIL)
     }
 
+    /**
+     * Верификация OTP для восстановления пароля
+     */
     fun verifyRecoveryOtp(email: String, otpCode: String) {
         verifyOtpInternal(email, otpCode, OtpType.RECOVERY)
     }
@@ -139,11 +147,13 @@ class EmailVerificationViewModel : ViewModel() {
     }
 }
 
+// Типы OTP
 enum class OtpType {
-    EMAIL,
-    RECOVERY
+    EMAIL, // Подтверждение email
+    RECOVERY // Восстановление пароля
 }
 
+// Общее состояние верификации
 sealed class VerificationState {
     object Idle : VerificationState()
     object Loading : VerificationState()
@@ -154,6 +164,7 @@ sealed class VerificationState {
     data class Error(val message: String) : VerificationState()
 }
 
+// Специфичное состояние для recovery
 data class RecoveryState(
     val resetToken: String?,
     val email: String

@@ -45,7 +45,11 @@ fun HomeScreen(
     onSettingsClick: () -> Unit = {}
 ) {
     var selected by rememberSaveable { mutableIntStateOf(0) }
+
+    // Состояние для выбранной категории
     var selectedCategory by remember { mutableStateOf("Все") }
+
+    // Данные категорий
     val categories = listOf(
         Category("Все", isSelected = true),
         Category("Outdoor", isSelected = false),
@@ -98,7 +102,7 @@ fun HomeScreen(
                     .height(80.dp)
                     .fillMaxWidth()
             ) {
-
+                // Фоновая картинка
                 androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.vector_1789),
                     contentDescription = null,
@@ -106,6 +110,7 @@ fun HomeScreen(
                     modifier = Modifier.matchParentSize()
                 )
 
+                // Контент меню поверх картинки
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -114,7 +119,7 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-
+                    // Левая группа иконок
                     Row {
                         IconButton(onClick = { selected = 0 }) {
                             Icon(

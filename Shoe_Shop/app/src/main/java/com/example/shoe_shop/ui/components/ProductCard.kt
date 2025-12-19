@@ -40,11 +40,13 @@ fun ProductCard(
         )
     ) {
         Column {
+            // Верхняя часть с изображением и кнопкой избранного
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)
             ) {
+                // Изображение товара
                 if (product.imageResId != null) {
                     Image(
                         painter = painterResource(id = product.imageResId),
@@ -53,12 +55,15 @@ fun ProductCard(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
+                    // Запасной вариант, если нет изображения
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Color.Gray.copy(alpha = 0.3f))
                     )
                 }
+
+                // Кнопка избранного поверх изображения
                 IconButton(
                     onClick = {
                         isFavorite = !isFavorite
@@ -76,6 +81,7 @@ fun ProductCard(
                 }
             }
 
+            // Нижняя часть с информацией о товаре
             Column(
                 modifier = Modifier
                     .padding(12.dp)
@@ -120,7 +126,7 @@ fun ProductCardPreview() {
             originalPrice = "P850.00",
             category = "BEST SELLER",
             imageUrl = "",
-            imageResId = null
+            imageResId = null // Здесь укажите ID реального изображения для превью
         ),
         onProductClick = {},
         onFavoriteClick = {}
