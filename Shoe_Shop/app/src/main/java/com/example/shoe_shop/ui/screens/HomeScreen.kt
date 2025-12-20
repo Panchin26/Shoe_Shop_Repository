@@ -147,16 +147,20 @@ fun HomeScreen(
                             .size(56.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        FloatingActionButton(
-                            onClick = { onCartClick() },
-                            modifier = Modifier.size(56.dp),
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        // Круглая кнопка корзины с голубым фоном
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp) // Размер такой же как у FloatingActionButton
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primary)
+                                .clickable { onCartClick() },
+                            contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.bag_2),
                                 contentDescription = "Cart",
-                                modifier = Modifier.size(24.dp)
+                                tint = Color.White,
+                                modifier = Modifier.size(28.dp)
                             )
                         }
                     }
